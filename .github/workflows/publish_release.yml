@@ -20,6 +20,8 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: jgrancell/bitgo
+          flavor: |
+            latest=true
 
       - name: Docker Hub Login
         uses: docker/login-action@v1
@@ -35,6 +37,7 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
   validate:
+    name: Package::Validate
     runs-on: ubuntu-latest
     services:
       bitgo:
