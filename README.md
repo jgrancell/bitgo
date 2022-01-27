@@ -30,3 +30,5 @@ This repository, specifically the `deploy/charts` Helm Chart directory, is watch
 
 The Helm Chart includes the option to deploy in a Highly Available configuration. When this is enabled, the pods
 will have an anti-affinity rule ensuring that they are all running on different nodes. Therefore, if a single Kubernetes node goes down it will not bring down the entire application.
+
+The application was registered to ArgoCD by deploying the chart through Terraform code found in `deploy/terraform`.
