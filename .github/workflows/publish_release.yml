@@ -85,7 +85,5 @@ jobs:
 #        working-directory: ./deploy/terraform
 #
 #      - name: Terraform Apply
-#        run: terraform apply -auto-approve
+#        run: terraform apply -auto-approve -var="argocd_server=${{secrets.ARGOCD_SERVER}}" -var="argocd_token=${{secrets.ARGOCD_TOKEN}}"
 #        working-directory: ./deploy/terraform
-#        with:
-#          argocd_auth_token: ${{secrets.ARGOCD_AUTH_TOKEN}}

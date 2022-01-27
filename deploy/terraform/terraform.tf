@@ -9,7 +9,6 @@ terraform {
 
 provider "argocd" {
   server_addr = var.argocd_server
-  username    = var.argocd_username
-  password    = var.argocd_password
+  auth_token  = var.argocd_token
 }
 

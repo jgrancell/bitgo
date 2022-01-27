@@ -10,26 +10,26 @@ resource "argocd_application" "bitgo" {
     source {
       repo_url        = "https://github.com/jgrancell/bitgo"
       path            = "deploy/chart"
-      target_revision = var.version
+      target_revision = var.application_version
 
       helm {
         parameter {
           name  = "application.version"
-          value = var.version
+          value = var.application_version
         }
       }
     }
-  }
 
-  destination {
-    server    = "https://kubernetes.default.svc"
-    namespace = "app-gc-websites"
-  }
+    destination {
+      server    = "https://kubernetes.default.svc"
+      namespace = "app-gc-websites"
+    }
 
-  sync_policy {
-    automated = {
-      prune     = true
-      self_heal = true
+    sync_policy {
+      automated = {
+        prune     = true
+        self_heal = true
+      }
     }
   }
 }
