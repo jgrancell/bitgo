@@ -1,0 +1,9 @@
+apiVersion: v2
+name: bitgo
+version: 1.0.0
+appVersion: 1.0.0
+kubeVersion: ">= 1.18.0-0"
+description: Bitgo Helm Chart
+home: https://joshgrancell.com
+sources:
+  - https://gitlab.com/jgrancell/bitgo

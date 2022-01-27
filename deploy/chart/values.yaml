@@ -1,0 +1,12 @@
+namespace: app-gc-websites
+
+application:
+  replicas: 2
+  hostname: bitgo.joshgrancell.com
+  image: docker.io/jgrancell/bitgo
+  version: main
+  highlyAvailable: true
+
+ingress:
+  enableTls: true
+  additionalHostnames: []

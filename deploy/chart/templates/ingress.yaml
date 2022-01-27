@@ -1,0 +1,33 @@
+{{- $hostnames := append .Values.ingress.additionalHostnames .Values.application.hostname }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.application.hostname | replace "." "-" }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.application.hostname }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.application.version }}
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/part-of: frontend
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  {{- if .Values.ingress.enableTls }}
+    kubernetes.io/tls-acme: 'true'
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  {{- end }}
+spec:
+  {{- if .Values.ingress.enableTls }}
+  tls:
+  - hosts:
+  {{- range $hostnames }}
+    - {{ . }}
+  {{- end }}
+    secretName: {{ .Values.application.hostname | replace "." "-" }}-tls
+  {{- end }}
+  defaultBackend:
+    service:
+      name: {{ .Values.application.hostname | replace "." "-" }}
+      port:
+        number: 80

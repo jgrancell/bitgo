@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.application.hostname | replace "." "-" }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.application.hostname }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.application.version }}
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: frontend
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app.kubernetes.io/name: {{ .Values.application.hostname }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.application.version }}
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: frontend

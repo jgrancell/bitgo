@@ -1,0 +1,79 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.application.hostname | replace "." "-" }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.application.hostname }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.application.version }}
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: frontend
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.application.hostname }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/version: {{ .Values.application.version }}
+      app.kubernetes.io/component: web
+      app.kubernetes.io/part-of: frontend
+  replicas: {{ .Values.application.replicas }}
+  revisionHistoryLimit: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 50%
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.application.hostname }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.application.version }}
+        app.kubernetes.io/component: web
+        app.kubernetes.io/part-of: frontend
+    spec:
+      {{- if .Values.application.highlyAvailable }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - {{ .Values.application.hostname }}
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - {{ .Release.Name }}
+              - key: app.kubernetes.io/version
+                operator: In
+                values:
+                - {{ .Values.application.version }}
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - web
+              - key: app.kubernetes.io/part-of
+                operator: In
+                values:
+                - frontend
+            topologyKey: "kubernetes.io/hostname"
+      {{- end }}
+      containers:
+      - name: app
+        image: "{{ .Values.application.image }}:{{ .Values.application.version }}"
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "12Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 8080
+        securityContext:
+          allowPrivilegeEscalation: false
