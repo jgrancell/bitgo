@@ -19,6 +19,9 @@ Github Actions is currently configured so that on any tagged release matching th
 - Build and publish a Docker image to Docker hub at `jgrancell/bitgo`.
 - Spin up a bitgo container and test several endpoints to validate its functionality.
 
+**NOTE**: The CI pipeline is expected to fail. There is a final Github Action that calls an invalid currency path
+which triggers a failure. This is expected, and shows that we can catch errors when we can't decode JSON.
+
 There is also an example of how to automate the Terraform deployment of the Helm Chart by tying it into ArgoCD. Again, this is only triggered on versioned releases, so the Helm Chart is only ever deploying tags that match `v*`
 
 
