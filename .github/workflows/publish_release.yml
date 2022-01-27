@@ -9,7 +9,7 @@ on:
 
 jobs:
   package:
-    name: Package Docker Image
+    name: Package::Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,6 +39,8 @@ jobs:
   validate:
     name: Package::Validate
     runs-on: ubuntu-latest
+    needs:
+      - package
     services:
       bitgo:
         image: jgrancell/bitgo:latest
@@ -50,7 +52,7 @@ jobs:
       - name: Check USD currency
         run: curl http://localhost:8080/usd | jq .amount
 #  deploy:
-#    name: Deploy New Release
+#    name: Package::Deploy
 #    runs-on: ubuntu-latest
 #    needs: 
 #      - package
