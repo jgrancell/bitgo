@@ -7,8 +7,10 @@ resource "argocd_application" "bitgo" {
   wait = true
 
   spec {
+    project = "applications"
+
     source {
-      repo_url        = "https://github.com/jgrancell/bitgo"
+      repo_url        = "https://github.com/jgrancell/bitgo.git"
       path            = "deploy/chart"
       target_revision = var.application_version
 
