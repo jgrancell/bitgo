@@ -50,7 +50,7 @@ jobs:
       - name: Check health endpoint
         run: curl http://localhost:8080/healthz
       - name: Check USD currency
-        run: curl http://localhost:8080/usd | jq .amount
+        run: curl http://localhost:8080/USD | jq .amount
 #  deploy:
 #    name: Package::Deploy
 #    runs-on: ubuntu-latest
