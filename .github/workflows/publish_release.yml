@@ -51,6 +51,22 @@ jobs:
         run: curl http://localhost:8080/healthz
       - name: Check USD currency
         run: curl http://localhost:8080/USD | jq .amount
+  failtest:
+    name: Package::Validate (Expected Failure)
+    runs-on: ubuntu-latest
+    needs:
+      - package
+      - validate
+    services:
+      bitgo:
+        image: jgrancell/bitgo:latest
+        ports:
+          - 8080:8080
+    steps:
+      - name: Check health endpoint
+        run: curl http://localhost:8080/healthz
+      - name: Check USD currency
+        run: curl http://localhost:8080/FAKEBUCKS | jq .amount
 #  deploy:
 #    name: Package::Deploy
 #    runs-on: ubuntu-latest
